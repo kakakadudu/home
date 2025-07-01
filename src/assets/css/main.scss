@@ -1,0 +1,109 @@
+@use "./base.scss";
+
+#app {
+  margin: 0 auto;
+  font-weight: normal;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+  padding: 3px;
+}
+.white {
+  color: #fff;
+}
+
+.f-c-c {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.f-c-b {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.f-c-s {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.f-c-e {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.f-c-e {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.f-e-c {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+.f-d-c-e {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+/********************** 边距 / 间隔 / font-size **********************/
+@for $i from 8 through 32 {
+  .fs#{$i} {
+    font-size: #{$i}px !important;
+  }
+}
+
+@for $i from 1 through 1000 {
+  .fw#{$i} {
+    font-weight: #{$i} !important;
+  }
+}
+
+@for $i from 1 through 300 {
+  .m#{$i} {
+    margin: #{$i}px !important;
+  }
+
+  .mt#{$i} {
+    margin-top: #{$i}px !important;
+  }
+
+  .mr#{$i} {
+    margin-right: #{$i}px !important;
+  }
+
+  .mb#{$i} {
+    margin-bottom: #{$i}px !important;
+  }
+
+  .ml#{$i} {
+    margin-left: #{$i}px !important;
+  }
+
+  .p#{$i} {
+    padding: #{$i}px !important;
+  }
+
+  .pt#{$i} {
+    padding-top: #{$i}px !important;
+  }
+
+  .pr#{$i} {
+    padding-right: #{$i}px !important;
+  }
+
+  .pb#{$i} {
+    padding-bottom: #{$i}px !important;
+  }
+
+  .pl#{$i} {
+    padding-left: #{$i}px !important;
+  }
+}
