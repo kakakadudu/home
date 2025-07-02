@@ -14,7 +14,7 @@
     </div>
     <!-- 桌面 -->
     <div class="desk f-d-c-e pr20 pl20 pt50 pb80">
-      <div class="desk-icon">
+      <div class="desk-icon" v-once>
         <div
           class="desk-icon-item"
           :style="{
@@ -26,8 +26,8 @@
         ></div>
         <div class="desk-icon-text f-c-c white fs12 fw500">测试</div>
       </div>
-      <div class="window">
-        <Component :is="bar[active].component" />
+      <div class="window" v-if="bar[active].component">
+        <Component :is="bar[active].component" @close="handleCloseWindow" />
       </div>
     </div>
 
@@ -42,7 +42,9 @@
             @mouseover="(e) => handleMouseOver(e, idx)"
           >
             <div
-              class="docker-item"
+              class="docker-item" :class="{
+                open: bar.find(f => f.id === item && f.status === 1)
+              }"
               v-if="[13, 14, 15].includes(item)"
               :style="{
                 background: `rgba(255, 255, 255, 0.1) ${returnBg(item)}`,
@@ -81,7 +83,7 @@ import ChromePage from "@/views/Chrome.vue";
 
 const dockerRef = shallowRef<HTMLDivElement>();
 const now = ref(new Date());
-var timer = null;
+var timer: ReturnType<typeof setInterval> | null = null;
 
 const bar = shallowRef([
   {
@@ -93,9 +95,11 @@ const bar = shallowRef([
     icon: ChromeFilled,
     text: "Chrome",
     component: ChromePage,
+    id: 13,
+    status: 1
   },
 ]);
-const active = ref(1);
+const active = ref(0);
 
 const setPropetyOfItem = (item: number) => {
   for (let i = item - 4; i <= item + 4; i++) {
@@ -166,6 +170,10 @@ const handleClick = (item: number) => {
       break;
     default:
   }
+};
+
+const handleCloseWindow = () => {
+  active.value = 0;
 };
 
 const getWeatherByLocation = () => {
@@ -291,6 +299,21 @@ onUnmounted(() => {
     transform: scale(var(--scale));
     transition: all 0.15s;
   }
+  .docker-item.open {
+    position: relative;
+    &::after{
+      position: absolute;
+      content: '';
+      width: 4px;
+      height: 3px;
+      border-radius: 50%;
+      bottom: -5px;
+      left: 0;
+      right: 0;
+      margin: auto;
+      background: gray;
+    }
+  }
 }
 
 .window {
@@ -304,7 +327,6 @@ onUnmounted(() => {
   border-radius: 8px;
   overflow: hidden;
   outline: 1px solid rgba(255, 255, 255, 0.2);
-  background-color: rgba(255, 255, 255, 0.1);
   box-shadow: 0px 0px 1px rgba(255, 255, 255, 0.5);
 }
 </style>

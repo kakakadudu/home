@@ -3,66 +3,85 @@
     <div class="bar pl30 pr30 f-c-b">
       <div class="left f-c-s">
         <div class="action f-c-s pr20">
-          <span class="red"></span>
+          <span class="red" @click="handleCloseTab(0)"></span>
           <span class="orange"></span>
           <span class="green"></span>
         </div>
-        <div class="new-tab f-c-s pl10 pr10 mt10">
-          <div class="tab-item f-c-b">
-            <div class="f-c-s">
-              <el-icon><ChromeFilled /></el-icon>
-              <span class="fs12 white ml10">新标签页</span>
-            </div>
-            <div class="close-tab f-c-c">
-              <el-icon><Close /></el-icon>
+        <div class="new-tab-box f-c-s pl20 pr20">
+          <div
+            class="new-tab f-c-s pl10 pr10 mt5"
+            v-for="(item, idx) in tabs"
+            :key="idx"
+            :class="{ active: idx === activeTab }"
+          >
+            <div class="tab-item pt5 pb5 pl10 pr10 f-c-b">
+              <div class="f-c-s">
+                <el-icon><Component :is="item.icon" /></el-icon>
+                <span class="fs12 white ml10 title">{{ item.title }}</span>
+              </div>
+              <div class="close-tab f-c-c ml100" @click="handleCloseTab(idx)">
+                <el-icon><Close /></el-icon>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="el-logo">
-      <div class="logo"></div>
-    </div>
-
-    <!-- 搜索框 -->
-    <div class="input-box f-c-c">
-      <div class="el-input-box">
-        <el-icon class="el-icon-search" size="18px"><Search /></el-icon>
-        <el-input
-          :placeholder="placeholder"
-          v-model="url"
-          @focus="handleSearchFocus"
-          @blur="handleSearchBlur"
-          @change="handleSearch"
-        />
-        <div class="icon-right">
-          <span class="icon-item icon-mic"></span>
-          <span class="icon-item icon-pic"></span>
+        <div class="create-tab f-c-c mt5" @click="handleCreateTab">
+          <el-icon color="#fff"><Plus /></el-icon>
         </div>
       </div>
     </div>
+    <div class="chrome-content">
+      <div class="el-logo">
+        <div class="logo"></div>
+      </div>
 
-    <!-- 常用地址 -->
-    <div class="menu-box f-c-c">
-      <div class="menu-list f-c-c">
-        <div
-          v-for="(m, idx) in menus"
-          :key="m.path"
-          class="item f-c-c fs13"
-          @click="m.enable ? handleSearch(m.path) : null"
-        >
-          <div class="item-icon f-c-c" :style="{ background: m.background }">
-            <el-icon v-if="m.icon" size="20px" color="#fff">
-              <Component :is="m.icon" />
-            </el-icon>
-            <img
-              v-if="!m.icon"
-              :src="`https://picsum.photos/20/20?random=${idx}`"
-              alt=""
-            />
+      <!-- 搜索框 -->
+      <div class="input-box f-c-c">
+        <div class="el-input-box">
+          <el-icon class="el-icon-search" size="18px"><Search /></el-icon>
+          <el-input
+            :placeholder="placeholder"
+            v-model="url"
+            @focus="handleSearchFocus"
+            @blur="handleSearchBlur"
+            @change="handleSearch"
+          />
+          <div class="icon-right">
+            <span class="icon-item icon-mic"></span>
+            <span class="icon-item icon-pic"></span>
           </div>
-          <div class="item-url white fw600">{{ m.title }}</div>
         </div>
+      </div>
+
+      <!-- 常用地址 -->
+      <div class="menu-box f-c-c">
+        <div class="menu-list f-c-c">
+          <div
+            v-for="(item, idx) in menus"
+            :key="idx"
+            class="item f-c-c fs13"
+            @click="handleShowTab(item)"
+          >
+            <div
+              class="item-icon f-c-c"
+              :style="{ background: item.background }"
+            >
+              <el-icon v-if="item.icon" size="20px" color="#fff">
+                <Component :is="item.icon" />
+              </el-icon>
+              <img
+                v-if="!item.icon"
+                :src="`https://picsum.photos/20/20?random=${idx}`"
+                alt=""
+              />
+            </div>
+            <div class="item-url white fw600">{{ item.title }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="component-content" v-if="tabs[activeTab].component">
+        <Component :is="tabs[activeTab].component" />
       </div>
     </div>
   </div>
@@ -81,8 +100,26 @@ import {
   Setting,
   Plus,
 } from "@element-plus/icons-vue";
+import TimePeroidPicker from "@/views/TimePeroidPicker.vue";
+
+const emit = defineEmits(["close"]);
+
+const tabs = ref<{ title: string; icon: any; id: number }[]>([
+  {
+    title: "新标签页",
+    icon: ChromeFilled,
+    id: 1,
+  },
+]);
+const activeTab = ref<string | number>(0);
 
 const menus = ref<{ [key: string]: string | any }[]>([
+  {
+    title: "有趣的东西",
+    icon: Grid,
+    component: TimePeroidPicker,
+    path: "TimePeroidPicker",
+  },
   {
     title: "添加快捷方式",
     icon: Plus,
@@ -106,19 +143,62 @@ const handleSearchFocus = () => {
 const handleSearchBlur = () => {
   placeholder.value = "在 Google 中搜索，或输入网址";
 };
+
+const handleCloseTab = (item: number) => {
+  if (tabs.value.length > 1) {
+    tabs.value.splice(item, 1);
+    activeTab.value = item == 0 ? tabs.value.length - 1 : item - 1;
+    return;
+  }
+  emit("close");
+};
+
+const handleCreateTab = () => {
+  tabs.value.push({
+    title: "新标签页",
+    id: tabs.value.length + 1,
+  });
+  activeTab.value = tabs.value.length - 1;
+};
+
+const handleShowTab = (item: any) => {
+  if (item.path) {
+    tabs.value.push({
+      ...item,
+      id: tabs.value.length + 1,
+    });
+    activeTab.value = tabs.value.length - 1;
+  }
+};
 </script>
 
 <style scoped lang="scss">
 .chrome {
+  --bg: rgba(30, 33, 28, 1);
+  --active-bg: rgba(42, 47, 40, 1);
   --content-width: 40vw;
-  background: rgba(42, 47, 40, 1);
+  background: var(--active-bg);
   height: 100%;
   width: 100%;
-  overflow: auto;
+  overflow: hidden;
+  .chrome-content {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 45px);
+    overflow: hidden;
+  }
+  .component-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: var(--active-bg);
+    inset: 0;
+    z-index: 999;
+  }
 }
 .bar {
   height: 45px;
-  background: rgba(30, 33, 28, 1);
+  background: var(--bg);
   .left {
     height: 100%;
   }
@@ -139,17 +219,50 @@ const handleSearchBlur = () => {
       }
     }
   }
+  .new-tab-box {
+    height: 100%;
+    max-width: calc(100vw - 200px);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
   .new-tab {
-    position: relative;
-    min-width: 220px;
-    background: rgba(42, 47, 40, 1);
-    height: calc(100% - 10px);
+    flex: 1;
+    max-width: 240px;
+    height: calc(100% - 5px);
+    background: var(--bg);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    .tab-item {
+      width: 100%;
+      border-radius: 10px;
+      &:hover {
+        background: var(--active-bg);
+      }
+      .title {
+        display: block;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        max-width: 100px;
+      }
+    }
+    .close-tab {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      transition: all 0.2s;
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+  .new-tab.active {
+    position: relative;
+    background: var(--active-bg);
     &::after {
       content: "";
       position: absolute;
-      top: 2px;
+      top: 7px;
       right: -8px;
       height: 100%;
       width: 16px;
@@ -160,25 +273,21 @@ const handleSearchBlur = () => {
       overflow: visible;
       content: "";
       position: absolute;
-      top: 2px;
+      top: 7px;
       left: -10px;
       height: 100%;
       width: 16px;
       background: inherit;
       clip-path: path("M 0,33 C 17,37 12,0 20,0 L 20, 56 Z");
     }
-    .tab-item {
-      width: 100%;
-      border-radius: 10px;
-    }
-    .close-tab {
-      width: 15px;
-      height: 15px;
-      border-radius: 50%;
-      transition: all 0.2s;
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-      }
+  }
+  .create-tab {
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    transition: all 0.2s;
+    &:hover {
+      background: var(--active-bg);
     }
   }
 }
@@ -274,7 +383,7 @@ const handleSearchBlur = () => {
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background-color: rgba(228, 226, 223, 1);
+    background-color: rgba(255, 255, 255, 0.1);
     margin-bottom: 6px;
   }
 }

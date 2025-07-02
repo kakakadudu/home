@@ -5,12 +5,8 @@
   font-weight: normal;
 }
 
-a,
-.green {
+a {
   text-decoration: none;
-  color: #00bd7e;
-  transition: 0.4s;
-  padding: 3px;
 }
 
 .white {
