@@ -26,13 +26,18 @@
                   ml100: true,
                 }"
                 @click="handleCloseTab(idx)"
+                v-if="item.component"
               >
                 <el-icon><Close /></el-icon>
               </div>
             </div>
           </div>
         </div>
-        <div class="create-tab f-c-c mt5" @click="handleCreateTab">
+        <div
+          class="create-tab f-c-c mt5"
+          @click="handleCreateTab"
+          v-if="showAddTab"
+        >
           <el-icon color="#fff"><Plus /></el-icon>
         </div>
       </div>
@@ -64,7 +69,7 @@
       <div class="menu-box f-c-c">
         <div class="menu-list f-c-c">
           <div
-            v-for="(item, idx) in menus"
+            v-for="(item, idx) in menus.filter((f) => !f.hide)"
             :key="idx"
             class="item f-c-c fs13"
             @click="handleShowTab(item)"
@@ -115,6 +120,7 @@ import type { TabType, MenuType } from "@/types/Chrome";
 const emit = defineEmits(["close"]);
 
 const newTabBoxRef = ref<HTMLDivElement | null>(null);
+const showAddTab = ref<boolean>(false);
 const tabs = ref<TabType[]>([
   {
     title: "新标签页",
@@ -142,6 +148,7 @@ const menus = ref<MenuType[]>([
     icon: markRaw(Plus),
     background: "#535e4f",
     path: "",
+    hide: !showAddTab.value,
   },
 ]);
 const url = ref<string>("");
@@ -175,7 +182,6 @@ const handleCloseTab = (idx: number) => {
 };
 
 const handleCreateTab = () => {
-  // console.log("handleCreateTab", newTabBoxRef.value.style.width);
   tabs.value.push({
     title: "新标签页",
     icon: markRaw(ChromeFilled),
@@ -185,6 +191,10 @@ const handleCreateTab = () => {
 };
 
 const handleShowTab = (item: MenuType) => {
+  if (tabs.value.some((s) => s.title === item.title)) {
+    activeTab.value = tabs.value.findIndex((s) => s.title === item.title);
+    return;
+  }
   if (item.path) {
     tabs.value.push({
       title: item.title,

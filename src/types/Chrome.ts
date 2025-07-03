@@ -13,4 +13,5 @@ export type MenuType = {
   component?: Component;
   path?: string;
   background?: string;
+  hide?: boolean;
 };
