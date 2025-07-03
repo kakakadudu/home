@@ -42,8 +42,9 @@
             @mouseover="(e) => handleMouseOver(e, idx)"
           >
             <div
-              class="docker-item" :class="{
-                open: bar.find(f => f.id === item && f.status === 1)
+              class="docker-item"
+              :class="{
+                open: bar.find((f) => f.id === item && f.status === 1),
               }"
               v-if="[13, 14, 15].includes(item)"
               :style="{
@@ -72,7 +73,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="Desktop">
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted, shallowRef } from "vue";
 import { ChromeFilled, Orange } from "@element-plus/icons-vue";
 import { formatDateTime } from "@/utils/index";
@@ -96,23 +97,23 @@ const bar = shallowRef([
     text: "Chrome",
     component: ChromePage,
     id: 13,
-    status: 1
+    status: 1,
   },
 ]);
 const active = ref(0);
 
-const setPropetyOfItem = (item: number) => {
-  for (let i = item - 4; i <= item + 4; i++) {
+const setPropetyOfItem = (idx: number) => {
+  for (let i = idx - 4; i <= idx + 4; i++) {
     let scale = 1,
       gapX = 45,
       gapY = 50;
 
-    if (i === item) {
+    if (i === idx) {
       scale = 1.8;
-    } else if (i === item - 1 || i === item + 1) {
+    } else if (i === idx - 1 || i === idx + 1) {
       scale = 1.7;
     } else {
-      scale = 1.8 - Math.abs(item - i) * 0.2;
+      scale = 1.8 - Math.abs(idx - i) * 0.2;
     }
     gapX = scale * 45;
     gapY = scale * 50;
@@ -124,12 +125,12 @@ const setPropetyOfItem = (item: number) => {
     }
   }
 };
-const handleMouseOver = (event: MouseEvent, item: number) => {
+const handleMouseOver = (event: MouseEvent, idx: number) => {
   if (event.target) {
     const itemRef = event.target as HTMLDivElement;
     if (itemRef.className?.includes("docker-item")) {
       if (itemRef.className === "docker-item") {
-        setPropetyOfItem(item);
+        setPropetyOfItem(idx);
       }
     }
   }
@@ -301,9 +302,9 @@ onUnmounted(() => {
   }
   .docker-item.open {
     position: relative;
-    &::after{
+    &::after {
       position: absolute;
-      content: '';
+      content: "";
       width: 4px;
       height: 3px;
       border-radius: 50%;

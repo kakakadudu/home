@@ -3,23 +3,30 @@
     <div class="bar pl30 pr30 f-c-b">
       <div class="left f-c-s">
         <div class="action f-c-s pr20">
-          <span class="red" @click="handleCloseTab(0)"></span>
+          <span class="red" @click="handleCloseTab(-1)"></span>
           <span class="orange"></span>
           <span class="green"></span>
         </div>
-        <div class="new-tab-box f-c-s pl20 pr20">
+        <div ref="newTabBoxRef" class="new-tab-box f-c-s pl20 pr20">
           <div
             class="new-tab f-c-s pl10 pr10 mt5"
             v-for="(item, idx) in tabs"
             :key="idx"
             :class="{ active: idx === activeTab }"
+            @click="handleClickTab(idx)"
           >
             <div class="tab-item pt5 pb5 pl10 pr10 f-c-b">
               <div class="f-c-s">
                 <el-icon><Component :is="item.icon" /></el-icon>
                 <span class="fs12 white ml10 title">{{ item.title }}</span>
               </div>
-              <div class="close-tab f-c-c ml100" @click="handleCloseTab(idx)">
+              <div
+                class="close-tab f-c-c"
+                :class="{
+                  ml100: true,
+                }"
+                @click="handleCloseTab(idx)"
+              >
                 <el-icon><Close /></el-icon>
               </div>
             </div>
@@ -88,7 +95,7 @@
 </template>
 
 <script setup lang="ts" name="Chrome">
-import { ref } from "vue";
+import { markRaw, ref } from "vue";
 import router from "@/router";
 import {
   ChromeFilled,
@@ -101,28 +108,38 @@ import {
   Plus,
 } from "@element-plus/icons-vue";
 import TimePeroidPicker from "@/views/TimePeroidPicker.vue";
+import Cascader from "@/views/Cascader.vue";
+import type { Component } from "vue";
+import type { TabType, MenuType } from "@/types/Chrome";
 
 const emit = defineEmits(["close"]);
 
-const tabs = ref<{ title: string; icon: any; id: number }[]>([
+const newTabBoxRef = ref<HTMLDivElement | null>(null);
+const tabs = ref<TabType[]>([
   {
     title: "新标签页",
-    icon: ChromeFilled,
+    icon: markRaw(ChromeFilled),
     id: 1,
   },
 ]);
-const activeTab = ref<string | number>(0);
+const activeTab = ref<number>(0);
 
-const menus = ref<{ [key: string]: string | any }[]>([
+const menus = ref<MenuType[]>([
   {
     title: "有趣的东西",
-    icon: Grid,
-    component: TimePeroidPicker,
+    icon: markRaw(Grid),
+    component: markRaw(TimePeroidPicker),
     path: "TimePeroidPicker",
   },
   {
+    title: "没趣的南北",
+    icon: markRaw(List),
+    component: markRaw(Cascader),
+    path: "Cascader",
+  },
+  {
     title: "添加快捷方式",
-    icon: Plus,
+    icon: markRaw(Plus),
     background: "#535e4f",
     path: "",
   },
@@ -144,31 +161,43 @@ const handleSearchBlur = () => {
   placeholder.value = "在 Google 中搜索，或输入网址";
 };
 
-const handleCloseTab = (item: number) => {
+const handleCloseTab = (idx: number) => {
+  if (idx === -1) {
+    emit("close");
+    return;
+  }
   if (tabs.value.length > 1) {
-    tabs.value.splice(item, 1);
-    activeTab.value = item == 0 ? tabs.value.length - 1 : item - 1;
+    tabs.value.splice(idx, 1);
+    activeTab.value = idx === 0 ? tabs.value.length - 1 : idx - 1;
     return;
   }
   emit("close");
 };
 
 const handleCreateTab = () => {
+  // console.log("handleCreateTab", newTabBoxRef.value.style.width);
   tabs.value.push({
     title: "新标签页",
+    icon: markRaw(ChromeFilled),
     id: tabs.value.length + 1,
   });
   activeTab.value = tabs.value.length - 1;
 };
 
-const handleShowTab = (item: any) => {
+const handleShowTab = (item: MenuType) => {
   if (item.path) {
     tabs.value.push({
-      ...item,
+      title: item.title,
+      icon: item.icon,
+      component: item.component,
       id: tabs.value.length + 1,
     });
     activeTab.value = tabs.value.length - 1;
   }
+};
+
+const handleClickTab = (idx: number) => {
+  activeTab.value = idx;
 };
 </script>
 
@@ -194,6 +223,7 @@ const handleShowTab = (item: any) => {
     background: var(--active-bg);
     inset: 0;
     z-index: 999;
+    overflow: auto;
   }
 }
 .bar {
@@ -224,6 +254,7 @@ const handleShowTab = (item: any) => {
     max-width: calc(100vw - 200px);
     overflow-x: auto;
     overflow-y: hidden;
+    user-select: none;
   }
   .new-tab {
     flex: 1;

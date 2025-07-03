@@ -1,0 +1,1 @@
+{"root":["./src/main.ts","./src/shims-vue.d.ts","./src/router/index.ts","./src/stores/counter.ts","./src/types/chrome.ts","./src/types/date.ts","./src/utils/index.ts","./src/app.vue","./src/views/chrome.vue","./src/views/desktop.vue","./src/views/timeperoidpicker.vue"],"errors":true,"version":"5.8.3"}

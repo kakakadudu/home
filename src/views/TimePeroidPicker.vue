@@ -86,6 +86,7 @@
 
 <script setup lang="ts" name="TimePeroidPicker">
 import { reactive, ref } from "vue";
+import { groupBy } from "lodash";
 
 const week = ref<string[]>(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]);
 const hours = ref<string[]>([
@@ -245,6 +246,7 @@ const returnDay = (position: string) => {
       return "周日";
   }
 };
+
 const returnTime = (position: string) => {
   switch (position) {
     case "0":
@@ -297,6 +299,7 @@ const returnTime = (position: string) => {
       return "23:00 - 00:00";
   }
 };
+
 const createGroup = (arry: string[]) => {
   let newArry = arry.map((f) => {
     return {
@@ -304,7 +307,7 @@ const createGroup = (arry: string[]) => {
       y: f.split("-")[0],
     };
   });
-  let groups = Object.groupBy(newArry, (f: { [key: string]: string }) => f.y);
+  let groups = groupBy(newArry, (f: { [key: string]: string }) => f.y);
   let newGroups: Group[] = [];
   Object.keys(groups).forEach((v) => {
     newGroups.push({
@@ -316,6 +319,7 @@ const createGroup = (arry: string[]) => {
   });
   return newGroups;
 };
+
 const handleClear = () => {
   selected.value = [];
   group.value = [];
@@ -389,10 +393,11 @@ window.addEventListener("mouseup", (event: MouseEvent) => {
 }
 .time-peroid-picker-day {
   text-align: center;
-  height: 40px;
-  line-height: 40px;
+  height: 30px;
+  line-height: 30px;
   text-align: center;
-  border-bottom: 1px solid #ebe5e5;
+  border-bottom: 1px solid gray;
+  user-select: none;
 }
 .time-peroid-picker-column {
   height: 100%;
@@ -401,11 +406,12 @@ window.addEventListener("mouseup", (event: MouseEvent) => {
   display: flex;
 }
 .time-peroid-picker-hour {
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
   text-align: center;
-  border-bottom: 1px solid #ebe5e5;
+  border-bottom: 1px solid gray;
+  user-select: none;
 }
 
 .time-peroid-picker-grid {
@@ -414,14 +420,14 @@ window.addEventListener("mouseup", (event: MouseEvent) => {
   width: fit-content;
 }
 .time-peroid-picker-row {
-  height: 40px;
+  height: 30px;
   width: fit-content;
   display: grid;
-  grid-template-columns: repeat(24, 40px);
+  grid-template-columns: repeat(24, 30px);
 }
 .time-peroid-picker-cell {
   height: 100%;
-  outline: 1px solid #ebe5e5;
+  outline: 1px solid gray;
 }
 .time-peroid-picker-cell.selected {
   background-color: #5fe077;
