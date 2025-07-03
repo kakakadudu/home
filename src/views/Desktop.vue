@@ -59,11 +59,9 @@
               v-else
               class="docker-item"
               :style="{
-                background: `hsl(${Math.floor(
-                  Math.random() * 361
-                )}deg ${Math.floor(Math.random() * 101)}% ${Math.floor(
-                  Math.random() * 101
-                )}% / 90%)`,
+                background: `hsl(${Math.floor(Math.random() * 361)}deg 
+                ${Math.floor(Math.random() * 101)}% 
+                ${Math.floor(Math.random() * 101)}% / 90%)`,
               }"
             ></div>
           </div>
@@ -73,7 +71,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" name="Desktop">
 import { ref, onMounted, onUnmounted, shallowRef } from "vue";
 import { ChromeFilled, Orange } from "@element-plus/icons-vue";
 import { formatDateTime } from "@/utils/index";
@@ -235,6 +233,7 @@ onUnmounted(() => {
   height: 100vh;
   background: url("../assets/images/dijia.png") no-repeat;
   background-size: cover;
+  overflow: hidden;
 }
 .bar {
   position: absolute;
@@ -253,6 +252,7 @@ onUnmounted(() => {
     }
   }
 }
+
 .desk {
   height: 100vh;
   gap: 20px;
@@ -263,6 +263,7 @@ onUnmounted(() => {
     height: 60px;
   }
 }
+
 .docker {
   position: absolute;
   bottom: 0;
@@ -329,5 +330,11 @@ onUnmounted(() => {
   overflow: hidden;
   outline: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0px 0px 1px rgba(255, 255, 255, 0.5);
+}
+
+@media screen and (max-width: 700px) {
+  .docker {
+    left: auto;
+  }
 }
 </style>

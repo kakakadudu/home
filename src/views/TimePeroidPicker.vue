@@ -58,7 +58,9 @@
     </div>
     <div class="time-peroid-picker-footer mt20">
       <div class="time-peroid-picker-btns mt20">
-        <el-button @click="handleClear">清空</el-button>
+        <el-button @click="handleClear" :disabled="!group.length">
+          清空
+        </el-button>
       </div>
       <div class="time-peroid-picker-times" @mouseleave="hover = null">
         <div
@@ -443,8 +445,9 @@ window.addEventListener("mouseup", (event: MouseEvent) => {
 }
 .time-peroid-picker-times {
   height: 300px;
-  width: 1030px;
+  max-width: 790px;
   overflow: auto;
+  margin: auto;
 }
 .time-peroid-picker-selected {
   display: flex;

@@ -8,8 +8,9 @@
               v-model="checkedProvinceAll"
               :indeterminate="indeterminateProvince"
               @change="changeProvinceAll"
-              >全选</el-checkbox
             >
+              全选
+            </el-checkbox>
             <div class="district-box">
               <div class="province-item" v-for="item in list" :key="item.code">
                 <el-checkbox
@@ -31,21 +32,32 @@
               v-model="checkedCityAll"
               :indeterminate="indeterminateCity"
               @change="changeCityAll"
-              >全选</el-checkbox
             >
+              全选
+            </el-checkbox>
             <div class="district-box">
               <div class="city-item" v-for="item in cities" :key="item.code">
                 <el-checkbox
                   v-model="item.checked"
                   :indeterminate="item.indeterminate"
                   @change="changeCity(item)"
-                />
-                <span
-                  :class="{ active: item.actived }"
-                  @click="clickCity(item)"
+                  v-if="!item.children"
                 >
-                  {{ item.name }}
-                </span>
+                  <span style="color: var(--color-text)">{{ item.name }}</span>
+                </el-checkbox>
+                <template v-else>
+                  <el-checkbox
+                    v-model="item.checked"
+                    :indeterminate="item.indeterminate"
+                    @change="changeCity(item)"
+                  />
+                  <span
+                    :class="{ active: item.actived }"
+                    @click="clickCity(item)"
+                  >
+                    {{ item.name }}
+                  </span>
+                </template>
               </div>
             </div>
           </div>
@@ -54,22 +66,26 @@
               v-model="checkedAreaAll"
               :indeterminate="indeterminateArea"
               @change="changeAreaAll"
-              >全选</el-checkbox
             >
+              全选
+            </el-checkbox>
             <div class="district-box">
               <div class="area-item" v-for="item in areas" :key="item.code">
                 <el-checkbox
                   v-model="item.checked"
                   :indeterminate="item.indeterminate"
                   @change="changeArea(item)"
-                />
-                <span>{{ item.name }}</span>
+                >
+                  <span style="color: var(--color-text)">{{ item.name }}</span>
+                </el-checkbox>
               </div>
             </div>
           </div>
         </div>
         <div class="btns-box f-c-e mt20">
-          <el-button @click="handleCancel">清空</el-button>
+          <el-button @click="handleCancel" :disabled="!selecteds.length">
+            清空
+          </el-button>
           <el-button type="primary" @click="handleOk">确定</el-button>
         </div>
       </div>

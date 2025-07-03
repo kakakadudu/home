@@ -138,7 +138,7 @@ const menus = ref<MenuType[]>([
     path: "TimePeroidPicker",
   },
   {
-    title: "没趣的南北",
+    title: "快乐的南北",
     icon: markRaw(List),
     component: markRaw(Cascader),
     path: "Cascader",
