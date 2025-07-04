@@ -2,8 +2,7 @@ import type { Component } from "vue";
 
 export type TabType = {
   title: string;
-  icon: Component;
-  id: number;
+  icon: Component; 
   component?: Component;
 };
 

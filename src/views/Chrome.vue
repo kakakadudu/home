@@ -94,7 +94,7 @@
         </div>
       </div>
 
-      <div class="component-content" v-if="tabs[activeTab].component">
+      <div class="component-content" v-if="tabs[activeTab]?.component">
         <Component :is="tabs[activeTab].component" />
       </div>
     </div>
@@ -127,7 +127,6 @@ const tabs = ref<TabType[]>([
   {
     title: "新标签页",
     icon: markRaw(ChromeFilled),
-    id: 1,
   },
 ]);
 const activeTab = ref<number>(0);
@@ -177,13 +176,14 @@ const handleSearchBlur = () => {
 };
 
 const handleCloseTab = (idx: number) => {
+  event?.stopPropagation();
   if (idx === -1) {
     emit("close");
     return;
   }
   if (tabs.value.length > 1) {
     tabs.value.splice(idx, 1);
-    activeTab.value = idx === 0 ? tabs.value.length - 1 : idx - 1;
+    activeTab.value = Math.min(idx, tabs.value.length - 1);
     return;
   }
   emit("close");
@@ -193,7 +193,6 @@ const handleCreateTab = () => {
   tabs.value.push({
     title: "新标签页",
     icon: markRaw(ChromeFilled),
-    id: tabs.value.length + 1,
   });
   activeTab.value = tabs.value.length - 1;
 };
@@ -208,7 +207,6 @@ const handleShowTab = (item: MenuType) => {
       title: item.title,
       icon: item.icon,
       component: item.component,
-      id: tabs.value.length + 1,
     });
     activeTab.value = tabs.value.length - 1;
   }

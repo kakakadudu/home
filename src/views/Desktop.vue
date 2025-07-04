@@ -26,7 +26,7 @@
         ></div>
         <div class="desk-icon-text f-c-c white fs12 fw500">测试</div>
       </div>
-      <div class="window" v-if="bar[active].component">
+      <div class="window" v-if="bar[active]?.component">
         <Component :is="bar[active].component" @close="handleCloseWindow" />
       </div>
     </div>

@@ -1,17 +1,18 @@
 <template>
-  <div class="load-more mt50 mb50">
-    <div class="card-box f-c-c flex-wrap">
-      <el-card class="card-item" v-for="item in list" :key="item">
-        <template #header>
-          <span class="fs16 fw600 pl10">Pic {{ item + 1 }}</span>
-        </template>
-        <div class="f-c-c pb10">
-          <img
-            class="card-img"
-            :src="`https://picsum.photos/100/100?random=${item}`"
-            :alt="`Pic ${item + 1}`"
-          />
-        </div>
+  <div ref="loadMoreScrollRef" class="load-more mt50 mb50">
+    <div
+      class="card-box flex-wrap"
+      :style="{
+        height: `${(total / cloumns) * (cardItemHeight + 10)}px`,
+      }"
+    >
+      <el-card
+        class="card-item f-c-c"
+        v-for="item in visibleItems"
+        :key="item.key"
+        :style="item.style"
+      >
+        <span class="fs18 white">{{ item.address }}</span>
       </el-card>
     </div>
     <div ref="loadMoreRef" class="f-c-c pt20">
@@ -23,47 +24,82 @@
 </template>
 
 <script setup lang="ts" name="LoadMore">
-import { onMounted, ref, nextTick, onUnmounted } from "vue";
+import { onMounted, ref, nextTick, onUnmounted, watch } from "vue";
 
-const list = ref<number[]>([]);
+const loadMoreScrollRef = ref<HTMLElement | null>(null);
+const loadMoreRef = ref<HTMLElement | null>(null);
+
+const allItems = ref<{ [key: string]: any }[]>([]);
+const visibleItems = ref<{ [key: string]: any }[]>([]);
 const size = ref<number>(100);
-const total = ref<number>(1000);
+const total = ref<number>(0);
 const page = ref<number>(1);
 const loading = ref<boolean>(false);
 const finished = ref<boolean>(false);
-const loadMoreRef = ref<HTMLElement | null>(null);
-
-const initData = () => {
-  loading.value = true;
-  const start = (page.value - 1) * size.value;
-  const end = start + size.value;
-  for (let i = start; i < end; i++) {
-    list.value.push(i);
-  }
-  setTimeout(() => {
-    loading.value = false;
-  }, 500);
-};
-
+const cardItemHeight = ref<number>(100);
+const cloumns = ref<number>(1); // 列数
+const lastX = ref<number>(0);
+const isScrolling = ref<boolean>(false);
 const loadMore = () => {
-  if (finished.value) {
+  if (finished.value || loading.value) {
     return;
   }
+  const itemW = cardItemHeight.value + 10;
+  if (loadMoreScrollRef.value) {
+    cloumns.value = Math.floor(loadMoreScrollRef.value.clientWidth / itemW);
+  }
   loading.value = true;
   const start = (page.value - 1) * size.value;
   const end = start + size.value;
+  let x = lastX.value,
+    y = Math.floor(start / cloumns.value);
   for (let i = start; i < end; i++) {
-    list.value.push(i);
+    if (i > 0 && i % cloumns.value === 0) {
+      // 换行
+      y++;
+      x = 0;
+    }
+    const key = i + 1;
+    allItems.value.push({
+      offsetTop: y * itemW,
+      key,
+      address: `No. ${key}`,
+      style: {
+        transform: `translateX(${x * itemW}px) translateY(${y * itemW}px)`,
+      },
+    });
+    x++;
   }
-  page.value++;
-  if (list.value.length > total.value) {
-    finished.value = true;
-  }
+  console.log(allItems.value);
   setTimeout(() => {
+    updateVisivleItems();
+
     loading.value = false;
+    total.value = end;
+    lastX.value = x;
+    page.value++;
   }, 500);
 };
-
+const updateVisivleItems = () => {
+  if (!loadMoreScrollRef.value) return;
+  const scrollTop = loadMoreScrollRef.value?.scrollTop || 0;
+  const list: { [key: string]: any }[] = [];
+  const buffer = cloumns.value * 2 * cardItemHeight.value;
+  const top = scrollTop,
+    bottom = scrollTop + buffer;
+  allItems.value.forEach((item) => {
+    const show =
+      top - buffer > item.offsetTop || bottom + buffer < item.offsetTop
+        ? false
+        : true;
+    if (show) {
+      list.push({
+        ...item,
+      });
+    }
+  });
+  visibleItems.value = list;
+};
 const ob = new IntersectionObserver((entries) => {
   if (entries[0].isIntersecting && !finished.value && !loading.value) {
     console.log("load more");
@@ -71,32 +107,51 @@ const ob = new IntersectionObserver((entries) => {
   }
 });
 
+const listen = (e: Event) => {
+  if (!isScrolling.value) {
+    isScrolling.value = true;
+    requestAnimationFrame(() => {
+      updateVisivleItems();
+      isScrolling.value = false;
+    });
+  }
+};
+
 onMounted(() => {
-  initData();
+  loadMore();
   nextTick(() => {
     loadMoreRef.value && ob.observe(loadMoreRef.value);
   });
+  loadMoreScrollRef.value &&
+    loadMoreScrollRef.value.addEventListener("scroll", listen);
 });
 
 onUnmounted(() => {
   ob.disconnect();
+  loadMoreScrollRef.value?.removeEventListener("scroll", listen);
 });
 </script>
 
 <style scoped lang="scss">
 .load-more {
+  --card-item-height: 100px;
   height: calc(100% - 100px);
   overflow: auto;
 }
 .card-box {
-  gap: 10px;
-  max-width: 800px;
-  margin: auto;
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  .card-img {
-    width: 100px;
-    height: 100px;
+  gap: 10px;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--card-item-height), 1fr)
+  );
+  .card-item {
+    position: absolute;
+    width: var(--card-item-height);
+    height: var(--card-item-height);
+    outline: 1px solid gray;
+    background: transparent;
   }
 }
 
