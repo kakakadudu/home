@@ -13,6 +13,16 @@ a {
   color: #fff;
 }
 
+.ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
 .f-c-c {
   display: flex;
   justify-content: center;

@@ -7,7 +7,7 @@
           <span class="orange"></span>
           <span class="green"></span>
         </div>
-        <div ref="newTabBoxRef" class="new-tab-box f-c-s pl20 pr20">
+        <div class="new-tab-box f-c-s pl20 pr20">
           <div
             class="new-tab f-c-s pl10 pr10 mt5"
             v-for="(item, idx) in tabs"
@@ -18,7 +18,9 @@
             <div class="tab-item pt5 pb5 pl10 pr10 f-c-b">
               <div class="f-c-s">
                 <el-icon><Component :is="item.icon" /></el-icon>
-                <span class="fs12 white ml10 title">{{ item.title }}</span>
+                <span class="fs12 white ml10 title ellipsis">
+                  {{ item.title }}
+                </span>
               </div>
               <div
                 class="close-tab f-c-c"
@@ -87,7 +89,7 @@
                 alt=""
               />
             </div>
-            <div class="item-url white fw600">{{ item.title }}</div>
+            <div class="item-title ellipsis white fw600">{{ item.title }}</div>
           </div>
         </div>
       </div>
@@ -114,12 +116,12 @@ import {
 } from "@element-plus/icons-vue";
 import TimePeroidPicker from "@/views/TimePeroidPicker.vue";
 import Cascader from "@/views/Cascader.vue";
+import LoadMore from "@/views/LoadMore.vue";
 import type { Component } from "vue";
 import type { TabType, MenuType } from "@/types/Chrome";
 
 const emit = defineEmits(["close"]);
 
-const newTabBoxRef = ref<HTMLDivElement | null>(null);
 const showAddTab = ref<boolean>(false);
 const tabs = ref<TabType[]>([
   {
@@ -142,6 +144,12 @@ const menus = ref<MenuType[]>([
     icon: markRaw(List),
     component: markRaw(Cascader),
     path: "Cascader",
+  },
+  {
+    title: "点开有惊吓",
+    icon: markRaw(Files),
+    component: markRaw(LoadMore),
+    path: "LoadMore",
   },
   {
     title: "添加快捷方式",
@@ -281,9 +289,6 @@ const handleClickTab = (idx: number) => {
       }
       .title {
         display: block;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
         max-width: 100px;
       }
     }
@@ -426,6 +431,10 @@ const handleClickTab = (idx: number) => {
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.1);
     margin-bottom: 6px;
+  }
+  .item-title {
+    display: block;
+    max-width: 100%;
   }
 }
 </style>

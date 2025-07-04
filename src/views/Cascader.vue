@@ -1,6 +1,6 @@
 <template>
   <div class="cascader f-c-c p40">
-    <div class="cascader-inner f-c-s">
+    <div class="cascader-inner f-c-s flex-wrap">
       <div class="cascader-left p20">
         <div class="region">
           <div class="region-box province">
@@ -355,7 +355,6 @@ const handleCancel = () => {
 .cascader-inner {
   width: fit-content;
   gap: 50px;
-  flex-wrap: wrap;
 }
 .cascader-left,
 .cascader-right {
