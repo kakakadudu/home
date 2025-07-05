@@ -70,7 +70,6 @@ const loadMore = () => {
     });
     x++;
   }
-  console.log(allItems.value);
   setTimeout(() => {
     updateVisivleItems();
 

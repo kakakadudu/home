@@ -13,10 +13,33 @@ a {
   color: #fff;
 }
 
+.overflow-auto {
+  overflow: auto;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
 .ellipsis {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+}
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.stretch {
+  align-self: stretch;
 }
 
 .flex-wrap {
@@ -61,15 +84,27 @@ a {
 }
 
 /********************** 边距 / 间隔 / font-size **********************/
-@for $i from 8 through 32 {
+@for $i from 8 through 40 {
   .fs#{$i} {
-    font-size: #{$i}px !important;
+    font-size: #{$i}px;
+  }
+  .br#{$i} {
+    margin-bottom: #{$i}px;
   }
 }
 
 @for $i from 1 through 1000 {
   .fw#{$i} {
-    font-weight: #{$i} !important;
+    font-weight: #{$i};
+  }
+  .h#{$i} {
+    height: #{$i}px;
+  }
+  .lh#{$i} {
+    line-height: #{$i}px;
+  }
+  .w#{$i} {
+    width: #{$i}px;
   }
 }
 

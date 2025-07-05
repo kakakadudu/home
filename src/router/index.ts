@@ -9,6 +9,11 @@ const router = createRouter({
       name: "Desktop",
       component: Desktop,
     },
+    {
+      path: "/echarts",
+      name: "Echarts",
+      component: () => import("@/views/Echarts.vue"),
+    },
   ],
 });
 

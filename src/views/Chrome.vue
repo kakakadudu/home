@@ -2,11 +2,7 @@
   <div class="chrome">
     <div class="bar pl30 pr30 f-c-b">
       <div class="left f-c-s">
-        <div class="action f-c-s pr20">
-          <span class="red" @click="handleCloseTab(-1)"></span>
-          <span class="orange"></span>
-          <span class="green"></span>
-        </div>
+        <Action @action="handleCloseTab(-1)" />
         <div class="new-tab-box f-c-s pl20 pr20">
           <div
             class="new-tab f-c-s pl10 pr10 mt5"
@@ -119,6 +115,7 @@ import Cascader from "@/views/Cascader.vue";
 import LoadMore from "@/views/LoadMore.vue";
 import type { Component } from "vue";
 import type { TabType, MenuType } from "@/types/Chrome";
+import Action from "@/components/Action.vue";
 
 const emit = defineEmits(["close"]);
 
@@ -247,23 +244,6 @@ const handleClickTab = (idx: number) => {
   background: var(--bg);
   .left {
     height: 100%;
-  }
-  .action {
-    gap: 10px;
-    span {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      &.red {
-        background: red;
-      }
-      &.orange {
-        background: orange;
-      }
-      &.green {
-        background: green;
-      }
-    }
   }
   .new-tab-box {
     height: 100%;

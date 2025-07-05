@@ -1,7 +1,7 @@
 <template name="DockerPage">
   <div class="desktop">
     <!-- 状态栏 -->
-    <div class="bar f-c-b pl10 pr10">
+    <div class="bar f-c-b pl10 pr10 h30">
       <div class="bar-icon f-c-s">
         <el-icon><Component :is="bar[active].icon" /></el-icon>
         <span class="fs14 fw600 white">{{ bar[active].text }}</span>
@@ -16,7 +16,7 @@
     <div class="desk f-d-c-e pr20 pl20 pt50 pb80">
       <div class="desk-icon" v-once>
         <div
-          class="desk-icon-item"
+          class="desk-icon-item w60 h60"
           :style="{
             background: returnBg(14),
             backgroundSize: 'cover',
@@ -33,7 +33,7 @@
 
     <!-- 程序坞 -->
     <div class="docker f-e-c pb10" v-once>
-      <div class="docker-box" @mouseleave="handleMouseLeave">
+      <div class="docker-box h50" @mouseleave="handleMouseLeave">
         <div class="doceker-list f-e-c pr10 pl10" ref="dockerRef">
           <div
             class="docker-item-outer f-c-c"
@@ -42,7 +42,7 @@
             @mouseover="(e) => handleMouseOver(e, idx)"
           >
             <div
-              class="docker-item"
+              class="docker-item w35 h35"
               :class="{
                 open: bar.find((f) => f.id === item && f.status === 1),
               }"
@@ -57,7 +57,7 @@
             ></div>
             <div
               v-else
-              class="docker-item"
+              class="docker-item w35 h35"
               :style="{
                 background: `hsl(${Math.floor(Math.random() * 361)}deg 
                 ${Math.floor(Math.random() * 101)}% 
@@ -79,6 +79,7 @@ import chorme from "@/assets/images/chorme.png";
 import folder from "@/assets/images/folder.png";
 import recycle from "@/assets/images/recycle.png";
 import ChromePage from "@/views/Chrome.vue";
+import FolderPage from "@/views/Folder.vue";
 
 const dockerRef = shallowRef<HTMLDivElement>();
 const now = ref(new Date());
@@ -95,6 +96,13 @@ const bar = shallowRef([
     text: "Chrome",
     component: ChromePage,
     id: 13,
+    status: 1,
+  },
+  {
+    icon: Orange,
+    text: "Orange",
+    component: FolderPage,
+    id: 14,
     status: 1,
   },
 ]);
@@ -166,6 +174,9 @@ const handleClick = (item: number) => {
   switch (item) {
     case 13:
       active.value = 1;
+      break;
+    case 14:
+      active.value = 2;
       break;
     default:
   }
@@ -241,7 +252,6 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   margin: auto;
-  height: 30px;
   width: 100vw;
   z-index: 999;
   background: rgba(4, 10, 14, 0.95);
@@ -256,12 +266,6 @@ onUnmounted(() => {
 .desk {
   height: 100vh;
   gap: 20px;
-  .desk-icon {
-  }
-  .desk-icon-item {
-    width: 60px;
-    height: 60px;
-  }
 }
 
 .docker {
@@ -277,7 +281,6 @@ onUnmounted(() => {
     --gapY: 50px;
     position: relative;
     width: fit-content;
-    height: 50px;
   }
   .doceker-list {
     height: 100%;
@@ -294,8 +297,6 @@ onUnmounted(() => {
     transition: all 0.15s;
   }
   .docker-item {
-    width: 35px;
-    height: 35px;
     border-radius: 8px;
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
     transform: scale(var(--scale));

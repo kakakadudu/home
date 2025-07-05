@@ -1,9 +1,9 @@
 <template>
-  <div class="cascader f-c-c p40">
+  <div class="cascader flex-column f-c-c p40">
     <div class="cascader-inner f-c-s flex-wrap">
       <div class="cascader-left p20">
-        <div class="region">
-          <div class="region-box province">
+        <div class="region flex">
+          <div class="region-box w240 pl20 province">
             <el-checkbox
               v-model="checkedProvinceAll"
               :indeterminate="indeterminateProvince"
@@ -11,14 +11,19 @@
             >
               全选
             </el-checkbox>
-            <div class="district-box">
-              <div class="province-item" v-for="item in list" :key="item.code">
+            <div class="district-box h300 overflow-auto">
+              <div
+                class="province-item flex"
+                v-for="item in list"
+                :key="item.code"
+              >
                 <el-checkbox
                   v-model="item.checked"
                   :indeterminate="item.indeterminate"
                   @change="changeProvince(item)"
                 />
                 <span
+                  class="pointer f-c-s"
                   :class="{ active: item.actived }"
                   @click="clickProvince(item)"
                 >
@@ -27,7 +32,7 @@
               </div>
             </div>
           </div>
-          <div class="region-box city" v-if="showCity">
+          <div class="region-box w240 pl20 city" v-if="showCity">
             <el-checkbox
               v-model="checkedCityAll"
               :indeterminate="indeterminateCity"
@@ -35,15 +40,21 @@
             >
               全选
             </el-checkbox>
-            <div class="district-box">
-              <div class="city-item" v-for="item in cities" :key="item.code">
+            <div class="district-box h300 overflow-auto">
+              <div
+                class="city-item flex"
+                v-for="item in cities"
+                :key="item.code"
+              >
                 <el-checkbox
                   v-model="item.checked"
                   :indeterminate="item.indeterminate"
                   @change="changeCity(item)"
                   v-if="!item.children"
                 >
-                  <span style="color: var(--color-text)">{{ item.name }}</span>
+                  <span style="color: var(--color-text)">
+                    {{ item.name }}
+                  </span>
                 </el-checkbox>
                 <template v-else>
                   <el-checkbox
@@ -52,6 +63,7 @@
                     @change="changeCity(item)"
                   />
                   <span
+                    class="pointer f-c-s"
                     :class="{ active: item.actived }"
                     @click="clickCity(item)"
                   >
@@ -61,7 +73,7 @@
               </div>
             </div>
           </div>
-          <div class="region-box area" v-if="showArea">
+          <div class="region-box w240 pl20 area" v-if="showArea">
             <el-checkbox
               v-model="checkedAreaAll"
               :indeterminate="indeterminateArea"
@@ -69,14 +81,20 @@
             >
               全选
             </el-checkbox>
-            <div class="district-box">
-              <div class="area-item" v-for="item in areas" :key="item.code">
+            <div class="district-box h300 overflow-auto">
+              <div
+                class="area-item flex"
+                v-for="item in areas"
+                :key="item.code"
+              >
                 <el-checkbox
                   v-model="item.checked"
                   :indeterminate="item.indeterminate"
                   @change="changeArea(item)"
                 >
-                  <span style="color: var(--color-text)">{{ item.name }}</span>
+                  <span style="color: var(--color-text)">
+                    {{ item.name }}
+                  </span>
                 </el-checkbox>
               </div>
             </div>
@@ -90,9 +108,13 @@
         </div>
       </div>
       <div class="cascader-right p20" v-if="!!selecteds.length">
-        <div class="selecteds">
-          <div class="selected-item" v-for="item in selecteds" :key="item.code">
-            <span>{{ item.fullName }}</span>
+        <div class="selecteds h384 overflow-auto">
+          <div
+            class="selected-item flex"
+            v-for="item in selecteds"
+            :key="item.code"
+          >
+            <span class="pointer lh32">{{ item.fullName }}</span>
           </div>
         </div>
       </div>
@@ -349,9 +371,6 @@ const handleCancel = () => {
 </script>
 
 <style scoped lang="scss">
-.cascader {
-  flex-direction: column;
-}
 .cascader-inner {
   width: fit-content;
   gap: 50px;
@@ -364,34 +383,17 @@ const handleCancel = () => {
 }
 .region {
   width: fit-content;
-  display: flex;
-
   .region-box {
-    padding-left: 20px;
-    width: 240px;
     &:not(:last-child) {
       border-right: 1px solid rgba(255, 255, 255, 0.2);
     }
   }
 }
-.district-box {
-  height: 300px;
-  overflow: auto;
-}
-.selecteds {
-  height: 384px;
-  overflow: auto;
-}
 .province-item,
 .city-item,
 .area-item,
 .selected-item {
-  display: flex;
   gap: 10px;
-  span {
-    cursor: pointer;
-    line-height: 32px;
-  }
 }
 .active {
   color: var(--el-color-primary);
