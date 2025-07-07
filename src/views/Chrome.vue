@@ -142,7 +142,7 @@ const menus = ref<MenuType[]>([
     path: "Cascader",
   },
   {
-    title: "点开有惊吓",
+    title: "点开",
     icon: markRaw(Files),
     component: markRaw(LoadMore),
     path: "LoadMore",

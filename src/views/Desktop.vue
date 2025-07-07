@@ -5,18 +5,19 @@
       <div class="bar-icon gap10 f-c-s">
         <el-icon><Component :is="bar[active].icon" /></el-icon>
         <span class="fs14 fw600 white">{{ bar[active].text }}</span>
+        <!-- 天气 -->
+        <img class="h30" :src="weatherData.icon" />
+        <span>{{ weatherData.temp }}°C </span>
       </div>
       <div class="bar-icon gap10 f-c-s">
-        <img class="h30" :src="weatherData.icon" />
-        <span>{{ weatherData.temp }}°C {{ weatherData.counrty }}</span>
-        <span class="w175 fs14 fw600 white">
+        <span class="fs14 fw600 white">
           {{ formatDateTime(now, { month: "short" }) }}
         </span>
       </div>
     </div>
     <!-- 桌面 -->
     <div class="desk gap20 f-d-c-e pr20 pl20 pt50 pb80">
-      <div class="desk-icon" v-once>
+      <div class="desk-icon" @dblclick="handleClick(14)" v-once>
         <div
           class="desk-icon-item w60 h60"
           :style="{
@@ -28,7 +29,11 @@
         ></div>
         <div class="desk-icon-text f-c-c white fs12 fw500">测试</div>
       </div>
-      <div class="window br8" v-if="bar[active]?.component">
+      <div
+        class="window br8"
+        :class="{ bg: active !== 2 }"
+        v-if="bar[active]?.component"
+      >
         <Component :is="bar[active].component" @close="handleCloseWindow" />
       </div>
     </div>
@@ -333,6 +338,9 @@ onUnmounted(() => {
   height: calc(100vh - 95px);
   width: 100vw;
   overflow: hidden;
+}
+
+.window.bg {
   outline: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0px 0px 1px rgba(255, 255, 255, 0.5);
 }

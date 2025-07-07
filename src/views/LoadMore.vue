@@ -12,7 +12,8 @@
         :key="item.key"
         :style="item.style"
       >
-        <span class="fs18 white">{{ item.address }}</span>
+        <!-- <span class="fs18 white">{{ item.address }}</span> -->
+        <img :src="`https://picsum.photos/100/100?r=${item.key}`" alt="" />
       </el-card>
     </div>
     <div ref="loadMoreRef" class="f-c-c pt20">

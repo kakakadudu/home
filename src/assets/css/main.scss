@@ -160,3 +160,9 @@ a {
     padding-left: #{$i}px !important;
   }
 }
+
+@media screen and (max-width: 475px) {
+  .hide {
+    display: none !important;
+  }
+}

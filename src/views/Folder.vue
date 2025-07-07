@@ -15,11 +15,25 @@
     <div class="right-folder flex flex-column flex-1">
       <div class="folder-bar-top h50"></div>
       <div class="folder-list f-c-s flex-1">
-        <div
-          class="list-item br5 flex-1"
-          v-for="(item, idx) in 3"
-          :key="idx"
-        ></div>
+        <div class="list-item pt5 pb5 pl10 pr10 flex-1">
+          <div class="item-folder f-c-s pt2 pb2 pl5 pr5 br5 hover">
+            <img class="w18 h18" src="@/assets/images/folder.png" alt="" />
+            <span class="fs12 white fw600 ml5">测试</span>
+          </div>
+        </div>
+        <div class="list-item pt5 pb5 pl10 pr10 flex-1">
+          <div class="item-folder f-c-s pt2 pb2 pl5 pr5 br5 active">
+            <img class="w18 h18" src="@/assets/images/pdf.png" alt="" />
+            <span class="fs12 white fw600 ml5">测试</span>
+          </div>
+        </div>
+        <div class="hide list-item pt5 pb5 pl10 pr10 flex-1">
+          <div class="file-preview br10 mt10 mb10">
+            <span class="f-c-s pl20 pr20 pt10">---</span>
+          </div>
+          <div class="fs14 white fw500">测试.pdf</div>
+          <div class="fs12">Adobe PDF (.pdf) - 1234.KB</div>
+        </div>
       </div>
       <div class="folder-bar-bottom h30"></div>
     </div>
@@ -27,12 +41,18 @@
 </template>
 
 <script setup lang="ts" name="Folder">
+import { ref, onMounted } from "vue";
 import Action from "@/components/Action.vue";
 import { Monitor } from "@element-plus/icons-vue";
 
+const emit = defineEmits(["close"]);
 const handleCloseFolder = () => {
-  console.log("handleCloseFolder");
+  emit("close");
 };
+
+onMounted(() => {
+  console.log("onMounted");
+});
 </script>
 
 <style lang="scss" scoped>
@@ -80,6 +100,21 @@ const handleCloseFolder = () => {
         top: 0;
         z-index: 1;
       }
+      .item-folder {
+        &.hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+        &.active {
+          background-color: rgba(55, 132, 32, 1);
+        }
+      }
+      .file-preview {
+        background: #fff;
+        width: 80%;
+        height: 40%;
+        margin: auto;
+        color: gray;
+      }
     }
     .folder-bar-top {
       background-color: rgba(255, 255, 255, 0.1);
@@ -88,6 +123,13 @@ const handleCloseFolder = () => {
     .folder-bar-bottom {
       border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .folder {
+    width: 100%;
+    height: 100%;
   }
 }
 </style>
