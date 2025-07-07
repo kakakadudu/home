@@ -1,18 +1,22 @@
 <template>
-  <div class="time-peroid-picker f-c-c">
-    <div class="time-peroid-picker-inner">
-      <div class="time-peroid-picker-week">
-        <div class="time-peroid-picker-day"></div>
-        <div v-for="day in week" class="time-peroid-picker-day" :key="day">
+  <div class="time-peroid-picker f-c-c flex-column">
+    <div class="time-peroid-picker-inner flex fit-content">
+      <div class="time-peroid-picker-week w60">
+        <div class="time-peroid-picker-day h30 lh30"></div>
+        <div
+          v-for="day in week"
+          class="time-peroid-picker-day h30 lh30"
+          :key="day"
+        >
           {{ day }}
         </div>
-        <div class="time-peroid-picker-day per mt40">per</div>
+        <div class="time-peroid-picker-day h30 lh30 per mt40">per</div>
       </div>
       <div class="time-peroid-picker-column">
-        <div class="time-peroid-picker-title">
+        <div class="time-peroid-picker-title flex">
           <div
             v-for="hour in hours"
-            class="time-peroid-picker-hour fs10"
+            class="time-peroid-picker-hour w30 h30 lh30 fs10"
             :key="hour"
           >
             {{ hour }}
@@ -20,11 +24,15 @@
         </div>
 
         <div
-          class="time-peroid-picker-grid"
+          class="time-peroid-picker-grid flex flex-column fit-content"
           @mousedown="handleMouseDown"
           @mouseover="handleMouseOver"
         >
-          <div v-for="(d, y) in week" class="time-peroid-picker-row" :key="y">
+          <div
+            v-for="(d, y) in week"
+            class="time-peroid-picker-row h30 fit-content"
+            :key="y"
+          >
             <div
               v-for="(h, x) in hours"
               class="time-peroid-picker-cell"
@@ -39,7 +47,7 @@
               :data-y="y"
             ></div>
           </div>
-          <div class="time-peroid-picker-row per mt40">
+          <div class="time-peroid-picker-row h30 per mt40 fit-content">
             <div
               v-for="(h, x) in hours"
               class="time-peroid-picker-cell"
@@ -62,17 +70,20 @@
           清空
         </el-button>
       </div>
-      <div class="time-peroid-picker-times" @mouseleave="hover = null">
+      <div
+        class="time-peroid-picker-times h300 overflow-auto"
+        @mouseleave="hover = null"
+      >
         <div
           v-for="(t, idx) in group"
-          class="time-peroid-picker-selected mt10"
+          class="time-peroid-picker-selected flex mt10"
           :key="idx"
         >
-          <span class="date">{{ returnDay(t.y) }}</span>
-          <div class="time-peroid-picker-selected-cell">
+          <span class="date w60">{{ returnDay(t.y) }}</span>
+          <div class="time-peroid-picker-selected-cell gap5">
             <span
               v-for="x1 in t.x"
-              class="time f-c-c"
+              class="time f-c-c fs12 pointer"
               :key="x1"
               :data-position="`${t.y}-${x1}`"
               @mouseover="hover = `${t.y}-${x1}`"
@@ -381,22 +392,15 @@ window.addEventListener("mouseup", (event: MouseEvent) => {
 .time-peroid-picker {
   width: 100%;
   height: 100%;
-  flex-direction: column;
 }
 .time-peroid-picker-inner {
-  display: flex;
   flex-direction: row;
-  width: fit-content;
 }
 .time-peroid-picker-week {
-  width: 60px;
   height: 100%;
   margin-right: 10px;
 }
 .time-peroid-picker-day {
-  text-align: center;
-  height: 30px;
-  line-height: 30px;
   text-align: center;
   border-bottom: 1px solid gray;
   user-select: none;
@@ -404,26 +408,12 @@ window.addEventListener("mouseup", (event: MouseEvent) => {
 .time-peroid-picker-column {
   height: 100%;
 }
-.time-peroid-picker-title {
-  display: flex;
-}
 .time-peroid-picker-hour {
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
   text-align: center;
   border-bottom: 1px solid gray;
   user-select: none;
 }
-
-.time-peroid-picker-grid {
-  display: flex;
-  flex-direction: column;
-  width: fit-content;
-}
 .time-peroid-picker-row {
-  height: 30px;
-  width: fit-content;
   display: grid;
   grid-template-columns: repeat(24, 30px);
 }
@@ -444,26 +434,13 @@ window.addEventListener("mouseup", (event: MouseEvent) => {
   max-width: 100%;
 }
 .time-peroid-picker-times {
-  height: 300px;
   max-width: 790px;
-  overflow: auto;
   margin: auto;
-}
-.time-peroid-picker-selected {
-  display: flex;
 }
 .time-peroid-picker-selected-cell {
   display: grid;
   grid-template-columns: repeat(10, 90px);
-  gap: 5px;
   width: calc(100% - 60px);
-}
-.time-peroid-picker-selected .date {
-  width: 60px;
-}
-.time-peroid-picker-selected .time {
-  font-size: 12px;
-  cursor: pointer;
 }
 .time-peroid-picker-selected .time:hover {
   background-color: #7c9ede;

@@ -1,7 +1,7 @@
 <template>
   <div ref="loadMoreScrollRef" class="load-more mt50 mb50">
     <div
-      class="card-box flex-wrap"
+      class="card-box gap10 flex-wrap"
       :style="{
         height: `${(total / cloumns) * (cardItemHeight + 10)}px`,
       }"
@@ -54,9 +54,11 @@ const loadMore = () => {
   let x = lastX.value,
     y = Math.floor(start / cloumns.value);
   for (let i = start; i < end; i++) {
-    if (i > 0 && i % cloumns.value === 0) {
+    if (i % cloumns.value === 0) {
       // 换行
-      y++;
+      if (i > start) {
+        y++;
+      }
       x = 0;
     }
     const key = i + 1;
@@ -140,7 +142,6 @@ onUnmounted(() => {
 .card-box {
   position: relative;
   display: grid;
-  gap: 10px;
   grid-template-columns: repeat(
     auto-fill,
     minmax(var(--card-item-height), 1fr)

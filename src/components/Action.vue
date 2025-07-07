@@ -1,8 +1,8 @@
 <template>
-  <div class="action f-c-s pr20">
-    <span class="red" @click="handleAction"></span>
-    <span class="orange"></span>
-    <span class="green" @click="handleScreen"></span>
+  <div class="action gap10 f-c-s pr20">
+    <span class="red w12 h12" @click="handleAction"></span>
+    <span class="orange w12 h12"></span>
+    <span class="green w12 h12" @click="handleScreen"></span>
   </div>
 </template>
 
@@ -19,10 +19,7 @@ const handleScreen = () => {
 
 <style lang="scss" scoped>
 .action {
-  gap: 10px;
   span {
-    width: 12px;
-    height: 12px;
     border-radius: 50%;
     &.red {
       background: red;

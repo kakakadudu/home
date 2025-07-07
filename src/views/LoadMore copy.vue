@@ -1,6 +1,6 @@
 <template>
   <div class="load-more mt50 mb50">
-    <div class="card-box f-c-c flex-wrap">
+    <div class="card-box gap10 f-c-c flex-wrap">
       <el-card class="card-item" v-for="item in list" :key="item">
         <template #header>
           <span class="fs16 fw600 pl10">Pic {{ item + 1 }}</span>
@@ -89,15 +89,10 @@ onUnmounted(() => {
   overflow: auto;
 }
 .card-box {
-  gap: 10px;
   max-width: 800px;
   margin: auto;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  .card-img {
-    width: 100px;
-    height: 100px;
-  }
 }
 
 :deep(.el-card__header),

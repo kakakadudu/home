@@ -2,18 +2,20 @@
   <div class="desktop">
     <!-- 状态栏 -->
     <div class="bar f-c-b pl10 pr10 h30">
-      <div class="bar-icon f-c-s">
+      <div class="bar-icon gap10 f-c-s">
         <el-icon><Component :is="bar[active].icon" /></el-icon>
         <span class="fs14 fw600 white">{{ bar[active].text }}</span>
       </div>
-      <div class="bar-icon f-c-s">
-        <span class="fs14 fw600 white">
+      <div class="bar-icon gap10 f-c-s">
+        <img class="h30" :src="weatherData.icon" />
+        <span>{{ weatherData.temp }}°C {{ weatherData.counrty }}</span>
+        <span class="w175 fs14 fw600 white">
           {{ formatDateTime(now, { month: "short" }) }}
         </span>
       </div>
     </div>
     <!-- 桌面 -->
-    <div class="desk f-d-c-e pr20 pl20 pt50 pb80">
+    <div class="desk gap20 f-d-c-e pr20 pl20 pt50 pb80">
       <div class="desk-icon" v-once>
         <div
           class="desk-icon-item w60 h60"
@@ -26,15 +28,18 @@
         ></div>
         <div class="desk-icon-text f-c-c white fs12 fw500">测试</div>
       </div>
-      <div class="window" v-if="bar[active]?.component">
+      <div class="window br8" v-if="bar[active]?.component">
         <Component :is="bar[active].component" @close="handleCloseWindow" />
       </div>
     </div>
 
     <!-- 程序坞 -->
     <div class="docker f-e-c pb10" v-once>
-      <div class="docker-box h50" @mouseleave="handleMouseLeave">
-        <div class="doceker-list f-e-c pr10 pl10" ref="dockerRef">
+      <div class="docker-box fit-content h50" @mouseleave="handleMouseLeave">
+        <div
+          class="doceker-list fit-content br10 f-e-c pr10 pl10"
+          ref="dockerRef"
+        >
           <div
             class="docker-item-outer f-c-c"
             v-for="(item, idx) in 15"
@@ -42,7 +47,7 @@
             @mouseover="(e) => handleMouseOver(e, idx)"
           >
             <div
-              class="docker-item w35 h35"
+              class="docker-item br8 w35 h35"
               :class="{
                 open: bar.find((f) => f.id === item && f.status === 1),
               }"
@@ -57,7 +62,7 @@
             ></div>
             <div
               v-else
-              class="docker-item w35 h35"
+              class="docker-item br8 w35 h35"
               :style="{
                 background: `hsl(${Math.floor(Math.random() * 361)}deg 
                 ${Math.floor(Math.random() * 101)}% 
@@ -107,6 +112,7 @@ const bar = shallowRef([
   },
 ]);
 const active = ref(0);
+const weatherData = ref<{ [key: string]: any }>({});
 
 const setPropetyOfItem = (idx: number) => {
   for (let i = idx - 4; i <= idx + 4; i++) {
@@ -185,7 +191,6 @@ const handleClick = (item: number) => {
 const handleCloseWindow = () => {
   active.value = 0;
 };
-
 const getWeatherByLocation = () => {
   // 首先获取用户位置
   if (navigator.geolocation) {
@@ -203,8 +208,14 @@ const getWeatherByLocation = () => {
             console.error("获取天气失败:", data.message);
             return;
           }
+
           console.log(`当前位置天气: ${data.weather[0].description}`);
           console.log(`温度: ${data.main.temp}°C`);
+          weatherData.value = {
+            temp: data.main.temp,
+            icon: `https://openweathermap.org/img/wn/${data.weather[0].icon}.png`,
+            counrty: data.sys.country,
+          };
         } catch (error) {
           console.error("获取天气失败:", error);
         }
@@ -256,7 +267,6 @@ onUnmounted(() => {
   z-index: 999;
   background: rgba(4, 10, 14, 0.95);
   .bar-icon {
-    gap: 10px;
     .el-icon svg {
       color: #f7f7f7;
     }
@@ -265,7 +275,6 @@ onUnmounted(() => {
 
 .desk {
   height: 100vh;
-  gap: 20px;
 }
 
 .docker {
@@ -280,12 +289,9 @@ onUnmounted(() => {
     --gapX: 45px;
     --gapY: 50px;
     position: relative;
-    width: fit-content;
   }
   .doceker-list {
     height: 100%;
-    width: fit-content;
-    border-radius: 10px;
     backdrop-filter: blur(6px);
     outline: 1px solid rgba(255, 255, 255, 0.2);
     background-color: rgba(255, 255, 255, 0.1);
@@ -297,7 +303,6 @@ onUnmounted(() => {
     transition: all 0.15s;
   }
   .docker-item {
-    border-radius: 8px;
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
     transform: scale(var(--scale));
     transition: all 0.15s;
@@ -327,7 +332,6 @@ onUnmounted(() => {
   bottom: 70px;
   height: calc(100vh - 95px);
   width: 100vw;
-  border-radius: 8px;
   overflow: hidden;
   outline: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0px 0px 1px rgba(255, 255, 255, 0.5);

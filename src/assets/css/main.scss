@@ -26,6 +26,10 @@ a {
   overflow: hidden;
   white-space: nowrap;
 }
+
+.fit-content {
+  width: fit-content;
+}
 .flex {
   display: flex;
 }
@@ -84,12 +88,15 @@ a {
 }
 
 /********************** 边距 / 间隔 / font-size **********************/
+@for $i from 1 through 40 {
+  .br#{$i} {
+    border-radius: #{$i}px;
+  }
+}
+
 @for $i from 8 through 40 {
   .fs#{$i} {
     font-size: #{$i}px;
-  }
-  .br#{$i} {
-    margin-bottom: #{$i}px;
   }
 }
 
@@ -108,7 +115,11 @@ a {
   }
 }
 
-@for $i from 1 through 300 {
+@for $i from 1 through 100 {
+  .gap#{$i} {
+    grid-gap: #{$i}px;
+  }
+
   .m#{$i} {
     margin: #{$i}px !important;
   }

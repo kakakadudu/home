@@ -1,6 +1,6 @@
 <template>
   <div class="chrome">
-    <div class="bar pl30 pr30 f-c-b">
+    <div class="bar h45 pl30 pr30 f-c-b">
       <div class="left f-c-s">
         <Action @action="handleCloseTab(-1)" />
         <div class="new-tab-box f-c-s pl20 pr20">
@@ -11,7 +11,7 @@
             :class="{ active: idx === activeTab }"
             @click="handleClickTab(idx)"
           >
-            <div class="tab-item pt5 pb5 pl10 pr10 f-c-b">
+            <div class="tab-item br10 pt5 pb5 pl10 pr10 f-c-b">
               <div class="f-c-s">
                 <el-icon><Component :is="item.icon" /></el-icon>
                 <span class="fs12 white ml10 title ellipsis">
@@ -19,7 +19,7 @@
                 </span>
               </div>
               <div
-                class="close-tab f-c-c"
+                class="close-tab w15 h15 f-c-c"
                 :class="{
                   ml100: true,
                 }"
@@ -32,7 +32,7 @@
           </div>
         </div>
         <div
-          class="create-tab f-c-c mt5"
+          class="create-tab w28 h28 f-c-c mt5"
           @click="handleCreateTab"
           v-if="showAddTab"
         >
@@ -41,8 +41,8 @@
       </div>
     </div>
     <div class="chrome-content">
-      <div class="el-logo">
-        <div class="logo"></div>
+      <div class="el-logo h168 mb38 f-e-c">
+        <div class="logo w272 h92"></div>
       </div>
 
       <!-- 搜索框 -->
@@ -56,9 +56,9 @@
             @blur="handleSearchBlur"
             @change="handleSearch"
           />
-          <div class="icon-right">
-            <span class="icon-item icon-mic"></span>
-            <span class="icon-item icon-pic"></span>
+          <div class="icon-right f-c-s gap15">
+            <span class="icon-item pointer w24 h24 icon-mic"></span>
+            <span class="icon-item pointer w24 h24 icon-pic"></span>
           </div>
         </div>
       </div>
@@ -69,11 +69,11 @@
           <div
             v-for="(item, idx) in menus.filter((f) => !f.hide)"
             :key="idx"
-            class="item f-c-c fs13"
+            class="item w112 h112 br4 f-c-c fs13"
             @click="handleShowTab(item)"
           >
             <div
-              class="item-icon f-c-c"
+              class="item-icon w48 h48 mb6 pointer f-c-c"
               :style="{ background: item.background }"
             >
               <el-icon v-if="item.icon" size="20px" color="#fff">
@@ -240,7 +240,6 @@ const handleClickTab = (idx: number) => {
   }
 }
 .bar {
-  height: 45px;
   background: var(--bg);
   .left {
     height: 100%;
@@ -261,7 +260,6 @@ const handleClickTab = (idx: number) => {
     border-top-right-radius: 10px;
     .tab-item {
       width: 100%;
-      border-radius: 10px;
       &:hover {
         background: var(--active-bg);
       }
@@ -271,8 +269,6 @@ const handleClickTab = (idx: number) => {
       }
     }
     .close-tab {
-      width: 15px;
-      height: 15px;
       border-radius: 50%;
       transition: all 0.2s;
       &:hover {
@@ -307,8 +303,6 @@ const handleClickTab = (idx: number) => {
   }
   .create-tab {
     border-radius: 50%;
-    width: 28px;
-    height: 28px;
     transition: all 0.2s;
     &:hover {
       background: var(--active-bg);
@@ -316,15 +310,8 @@ const handleClickTab = (idx: number) => {
   }
 }
 .el-logo {
-  height: 168px;
-  margin-bottom: 38px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
   .logo {
     background: rgba(86, 98, 83, 1);
-    width: 272px;
-    height: 92px;
     mask-image: url("../assets/images/google_logo.svg");
     mask-repeat: no-repeat;
     mask-size: contain;
@@ -371,14 +358,8 @@ const handleClickTab = (idx: number) => {
   }
   .icon-right {
     right: 20px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
     .icon-item {
-      cursor: pointer;
       display: inline-block;
-      width: 24px;
-      height: 24px;
     }
     .icon-mic {
       background: url("../assets/images/mic.svg") no-repeat center;
@@ -393,22 +374,15 @@ const handleClickTab = (idx: number) => {
 .menu-list {
   width: var(--content-width);
   .item {
-    width: 112px;
-    height: 112px;
     flex-direction: column;
-    border-radius: 4px;
     overflow: hidden;
     &:hover {
       background-color: rgba(255, 255, 255, 0.1);
     }
   }
   .item-icon {
-    cursor: pointer;
-    width: 48px;
-    height: 48px;
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.1);
-    margin-bottom: 6px;
   }
   .item-title {
     display: block;

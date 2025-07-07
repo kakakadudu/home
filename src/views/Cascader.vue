@@ -1,8 +1,8 @@
 <template>
   <div class="cascader flex-column f-c-c p40">
-    <div class="cascader-inner f-c-s flex-wrap">
-      <div class="cascader-left p20">
-        <div class="region flex">
+    <div class="cascader-inner fit-content f-c-s flex-wrap gap50">
+      <div class="cascader-left p20 br5 fit-content">
+        <div class="region flex fit-content">
           <div class="region-box w240 pl20 province">
             <el-checkbox
               v-model="checkedProvinceAll"
@@ -13,7 +13,7 @@
             </el-checkbox>
             <div class="district-box h300 overflow-auto">
               <div
-                class="province-item flex"
+                class="province-item flex gap10"
                 v-for="item in list"
                 :key="item.code"
               >
@@ -42,7 +42,7 @@
             </el-checkbox>
             <div class="district-box h300 overflow-auto">
               <div
-                class="city-item flex"
+                class="city-item flex gap10"
                 v-for="item in cities"
                 :key="item.code"
               >
@@ -83,7 +83,7 @@
             </el-checkbox>
             <div class="district-box h300 overflow-auto">
               <div
-                class="area-item flex"
+                class="area-item flex gap10"
                 v-for="item in areas"
                 :key="item.code"
               >
@@ -107,10 +107,10 @@
           <el-button type="primary" @click="handleOk">确定</el-button>
         </div>
       </div>
-      <div class="cascader-right p20" v-if="!!selecteds.length">
+      <div class="cascader-right p20 br5 fit-content" v-if="!!selecteds.length">
         <div class="selecteds h384 overflow-auto">
           <div
-            class="selected-item flex"
+            class="selected-item flex gap10"
             v-for="item in selecteds"
             :key="item.code"
           >
@@ -371,29 +371,16 @@ const handleCancel = () => {
 </script>
 
 <style scoped lang="scss">
-.cascader-inner {
-  width: fit-content;
-  gap: 50px;
-}
 .cascader-left,
 .cascader-right {
-  width: fit-content;
   box-shadow: 0 2px 12px 0 rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
 }
 .region {
-  width: fit-content;
   .region-box {
     &:not(:last-child) {
       border-right: 1px solid rgba(255, 255, 255, 0.2);
     }
   }
-}
-.province-item,
-.city-item,
-.area-item,
-.selected-item {
-  gap: 10px;
 }
 .active {
   color: var(--el-color-primary);

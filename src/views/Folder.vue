@@ -1,11 +1,11 @@
 <template>
-  <div class="folder f-c-s">
+  <div class="folder f-c-s br10">
     <div class="left-bar pt20 pb20 pl10 pr10">
       <Action @action="handleCloseFolder" />
       <div class="pt10">
         <span class="fs10">个人收藏</span>
         <div class="title-list pt10">
-          <div class="list-item f-c-s active pl10 pr10 lh30">
+          <div class="list-item br5 f-c-s active pl10 pr10 lh30">
             <el-icon><Monitor /></el-icon>
             <span class="fs13 white ml10">桌面</span>
           </div>
@@ -15,7 +15,11 @@
     <div class="right-folder flex flex-column flex-1">
       <div class="folder-bar-top h50"></div>
       <div class="folder-list f-c-s flex-1">
-        <div class="list-item flex-1" v-for="(item, idx) in 3" :key="idx"></div>
+        <div
+          class="list-item br5 flex-1"
+          v-for="(item, idx) in 3"
+          :key="idx"
+        ></div>
       </div>
       <div class="folder-bar-bottom h30"></div>
     </div>
@@ -37,7 +41,6 @@ const handleCloseFolder = () => {
   inset: 0;
   width: 60%;
   height: 80%;
-  border-radius: 10px;
   margin: auto;
   overflow: hidden;
   outline: 1px solid rgba(255, 255, 255, 0.2);
@@ -50,9 +53,10 @@ const handleCloseFolder = () => {
     backdrop-filter: blur(6px);
     background-color: rgba(255, 255, 255, 0.1);
     border-right: 1px solid #000;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
 
     .list-item {
-      border-radius: 5px;
       &.active {
         background-color: rgba(255, 255, 255, 0.1);
       }
