@@ -2,7 +2,7 @@
   <div class="chrome">
     <div class="bar h45 pl30 pr30 f-c-b">
       <div class="left f-c-s">
-        <Action @action="handleCloseTab(-1)" />
+        <Action @exit="handleCloseTab(-1)" />
         <div class="new-tab-box f-c-s pl20 pr20">
           <div
             class="new-tab f-c-s pl10 pr10 mt5"
@@ -21,7 +21,7 @@
               <div
                 class="close-tab w15 h15 f-c-c"
                 :class="{
-                  ml100: true,
+                  ml60: true,
                 }"
                 @click="handleCloseTab(idx)"
                 v-if="item.component"
@@ -142,7 +142,7 @@ const menus = ref<MenuType[]>([
     path: "Cascader",
   },
   {
-    title: "点开",
+    title: "click me",
     icon: markRaw(Files),
     component: markRaw(LoadMore),
     path: "LoadMore",
@@ -246,7 +246,7 @@ const handleClickTab = (idx: number) => {
   }
   .new-tab-box {
     height: 100%;
-    max-width: calc(100vw - 200px);
+    max-width: calc(100vw - 160px);
     overflow-x: auto;
     overflow-y: hidden;
     user-select: none;

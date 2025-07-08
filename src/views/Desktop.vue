@@ -17,7 +17,7 @@
     </div>
     <!-- 桌面 -->
     <div class="desk gap20 f-d-c-e pr20 pl20 pt50 pb80">
-      <div class="desk-icon" @dblclick="handleClick(14)" v-once>
+      <div class="desk-icon" @dblclick.stop.prevent="handleClick(14)" v-once>
         <div
           class="desk-icon-item w60 h60"
           :style="{
@@ -39,20 +39,17 @@
     </div>
 
     <!-- 程序坞 -->
-    <div class="docker f-e-c pb10" v-once>
-      <div class="docker-box fit-content h50" @mouseleave="handleMouseLeave">
-        <div
-          class="doceker-list fit-content br10 f-e-c pr10 pl10"
-          ref="dockerRef"
-        >
+    <div class="docker" v-once>
+      <div class="docker-box" @mouseleave="handleMouseLeave">
+        <div class="doceker-list" ref="dockerRef">
           <div
-            class="docker-item-outer f-c-c"
+            class="docker-item-outer"
             v-for="(item, idx) in 15"
             :key="item"
             @mouseover="(e) => handleMouseOver(e, idx)"
           >
             <div
-              class="docker-item br8 w35 h35"
+              class="docker-item"
               :class="{
                 open: bar.find((f) => f.id === item && f.status === 1),
               }"
@@ -67,7 +64,7 @@
             ></div>
             <div
               v-else
-              class="docker-item br8 w35 h35"
+              class="docker-item"
               :style="{
                 background: `hsl(${Math.floor(Math.random() * 361)}deg 
                 ${Math.floor(Math.random() * 101)}% 
@@ -146,7 +143,10 @@ const handleMouseOver = (event: MouseEvent, idx: number) => {
   if (event.target) {
     const itemRef = event.target as HTMLDivElement;
     if (itemRef.className?.includes("docker-item")) {
-      if (itemRef.className === "docker-item") {
+      if (
+        itemRef.className === "docker-item" ||
+        itemRef.className === "docker-item open"
+      ) {
         setPropetyOfItem(idx);
       }
     }
@@ -182,6 +182,7 @@ const returnBg = (item: number) => {
 };
 
 const handleClick = (item: number) => {
+  console.log("handleClick", item);
   switch (item) {
     case 13:
       active.value = 1;
@@ -289,11 +290,17 @@ onUnmounted(() => {
   right: 0;
   margin: auto;
   z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 10px;
   .docker-box {
     --scale: 1;
     --gapX: 45px;
     --gapY: 50px;
     position: relative;
+    width: fit-content;
+    height: 50px;
   }
   .doceker-list {
     height: 100%;
@@ -301,16 +308,29 @@ onUnmounted(() => {
     outline: 1px solid rgba(255, 255, 255, 0.2);
     background-color: rgba(255, 255, 255, 0.1);
     box-shadow: 0px 0px 1px rgba(255, 255, 255, 0.5);
+    width: fit-content;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-left: 10px;
+    padding-right: 10px;
   }
   .docker-item-outer {
     width: var(--gapX);
     height: var(--gapY);
     transition: all 0.15s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .docker-item {
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
     transform: scale(var(--scale));
     transition: all 0.15s;
+    border-radius: 8px;
+    width: 35px;
+    height: 35px;
   }
   .docker-item.open {
     position: relative;

@@ -1,7 +1,7 @@
 <template>
   <div class="folder f-c-s br10">
     <div class="left-bar pt20 pb20 pl10 pr10">
-      <Action @action="handleCloseFolder" />
+      <Action @exit="handleCloseFolder" />
       <div class="pt10">
         <span class="fs10">个人收藏</span>
         <div class="title-list pt10">
@@ -129,7 +129,6 @@ onMounted(() => {
 @media screen and (max-width: 768px) {
   .folder {
     width: 100%;
-    height: 100%;
   }
 }
 </style>

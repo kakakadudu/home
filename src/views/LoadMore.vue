@@ -3,6 +3,7 @@
     <div
       class="card-box gap10 flex-wrap"
       :style="{
+        width: `${cloumns * (cardItemHeight + 10) - 10}px`,
         height: `${(total / cloumns) * (cardItemHeight + 10)}px`,
       }"
     >
@@ -102,12 +103,17 @@ const updateVisivleItems = () => {
   });
   visibleItems.value = list;
 };
-const ob = new IntersectionObserver((entries) => {
-  if (entries[0].isIntersecting && !finished.value && !loading.value) {
-    console.log("load more");
-    loadMore();
+const ob = new IntersectionObserver(
+  (entries) => {
+    if (entries[0].isIntersecting && !finished.value && !loading.value) {
+      console.log("load more");
+      loadMore();
+    }
+  },
+  {
+    threshold: 0.9,
   }
-});
+);
 
 const listen = (e: Event) => {
   if (!isScrolling.value) {
@@ -143,6 +149,7 @@ onUnmounted(() => {
 .card-box {
   position: relative;
   display: grid;
+  margin: auto;
   grid-template-columns: repeat(
     auto-fill,
     minmax(var(--card-item-height), 1fr)
